@@ -100,5 +100,5 @@ done
 
 echo
 echo "提示：本包用本机自签名证书 $("${ROOT}/Tools/sign_app.sh" --describe 2>/dev/null || echo 'Launchpad Local Signing') 签名（未公证）。"
-echo "      好处：隐私授权（屏幕录制等）绑定证书指纹，重新编译/重装都不会失效。"
+echo "      好处：签名身份固定（证书指纹 + bundle id），重新编译/重装都保持一致。"
 echo "      首次打开若被 Gatekeeper 拦下：右键 → 打开，或到 系统设置 → 隐私与安全性 允许。"
