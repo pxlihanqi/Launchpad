@@ -1,0 +1,3 @@
+/* 简体中文名称：系统设置（隐私授权列表）、访达、启动器里显示的名字 */
+"CFBundleDisplayName" = "启动台";
+"CFBundleName" = "启动台";

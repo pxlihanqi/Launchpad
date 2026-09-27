@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="1">
+    <title>启动台 Launchpad</title>
+    <organization>com.launchpad</organization>
+    <domains enable_localSystem="true"/>
+    <options customize="never" require-scripts="false" rootVolumeOnly="true" hostArchitectures="arm64,x86_64"/>
+    <allowed-os-versions>
+        <os-version min="14.0"/>
+    </allowed-os-versions>
+    <choices-outline>
+        <line choice="default">
+            <line choice="com.launchpad.app"/>
+        </line>
+    </choices-outline>
+    <choice id="default"/>
+    <choice id="com.launchpad.app" visible="false" title="启动台 Launchpad">
+        <pkg-ref id="com.launchpad.app"/>
+    </choice>
+    <pkg-ref id="com.launchpad.app">component.pkg</pkg-ref>
+</installer-gui-script>

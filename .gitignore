@@ -1,0 +1,10 @@
+.build/
+dist/
+*.p12
+*.pem
+DerivedData/
+*.xcodeproj/xcuserdata/
+.DS_Store
+# 签名用的本机钥匙串/证书导出物（绝不入库）
+*.keychain-db
+signing/

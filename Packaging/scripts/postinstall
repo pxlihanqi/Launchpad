@@ -1,0 +1,4 @@
+#!/bin/bash
+# 清掉隔离属性，避免首次打开时被 Gatekeeper 拦下（本应用是本机 ad-hoc 签名）。
+xattr -dr com.apple.quarantine /Applications/Launchpad.app 2>/dev/null || true
+exit 0

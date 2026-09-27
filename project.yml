@@ -1,0 +1,76 @@
+name: Launchpad
+options:
+  bundleIdPrefix: com.launchpad
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    SWIFT_STRICT_CONCURRENCY: minimal
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGNING_REQUIRED: "NO"
+    # Signing is done by the post-build script below: the project lives in a
+    # cloud synced folder, and codesign refuses to sign while Finder/fileprovider
+    # extended attributes are present on the bundle.
+    CODE_SIGNING_ALLOWED: "NO"
+    CODE_SIGN_STYLE: Manual
+    ENABLE_HARDENED_RUNTIME: "NO"
+    ENABLE_USER_SCRIPT_SANDBOXING: "NO"
+    ALWAYS_SEARCH_USER_PATHS: "NO"
+    DEAD_CODE_STRIPPING: "YES"
+    CLANG_MODULE_CACHE_PATH: $(SRCROOT)/.build/modulecache
+    SWIFT_MODULECACHE_PATH: $(SRCROOT)/.build/modulecache
+
+targets:
+  Launchpad:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+      - path: Resources/Assets.xcassets
+        buildPhase: resources
+      - path: Resources/zh-Hans.lproj
+        buildPhase: resources
+      - path: Resources/en.lproj
+        buildPhase: resources
+    dependencies:
+      - sdk: libsqlite3.tbd
+    settings:
+      base:
+        PRODUCT_NAME: Launchpad
+        PRODUCT_BUNDLE_IDENTIFIER: com.launchpad.app
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: "NO"
+        COMBINE_HIDPI_IMAGES: "YES"
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
+    postBuildScripts:
+      - name: Sign ad hoc
+        script: |
+          set -e
+          # 用 Tools/sign_app.sh 统一签名：有固定证书就用证书（隐私授权不会因
+          # 重新编译失效），没有就退回 ad-hoc。脚本内已包含去属性与重试，
+          # 因为工程可能位于 iCloud 同步目录，扩展属性会让 codesign 拒绝。
+          "$SRCROOT/Tools/sign_app.sh" "$TARGET_BUILD_DIR/$WRAPPER_NAME"
+        basedOnDependencyAnalysis: false
+    info:
+      path: Support/Info.plist
+      properties:
+        CFBundleName: Launchpad
+        CFBundleDisplayName: 启动台
+        CFBundlePackageType: APPL
+        CFBundleShortVersionString: "1.3.6"
+        CFBundleVersion: "25"
+        CFBundleIconName: AppIcon
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, zh-Hans]
+        LSMinimumSystemVersion: "14.0"
+        LSApplicationCategoryType: public.app-category.utilities
+        # 普通应用：在程序坞里保留图标，点击即进入启动台（菜单栏图标也保留）
+        LSUIElement: false
+        NSHighResolutionCapable: true
+        NSSupportsAutomaticGraphicsSwitching: true
+        NSPrincipalClass: NSApplication
