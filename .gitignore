@@ -5,6 +5,8 @@ dist/
 DerivedData/
 *.xcodeproj/xcuserdata/
 .DS_Store
+.idea/
+*.xcuserstate
 # 签名用的本机钥匙串/证书导出物（绝不入库）
 *.keychain-db
 signing/
